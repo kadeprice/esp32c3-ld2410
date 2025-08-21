@@ -1,0 +1,150 @@
+substitutions:
+   # Default name 
+  name: "room_presence"
+  # Default friendly name 
+  friendly_name: "Athom Garage Door"
+  # Allows ESP device to be automatically linked to an 'Area' in Home Assistant. Typically used for areas such as 'Lounge Room', 'Kitchen' etc
+  room: ""
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  comment: "${device_description}"
+  area: "${room}"
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret home_assistant_api_key
+
+ota:
+  platform: esphome
+
+wifi:
+  ap: {}
+  fast_connect: "${wifi_fast_connect}"
+  domain: "${dns_domain}"
+
+captive_portal:
+
+web_server:
+  port: 80
+  include_internal: true
+
+# ---------------------------------------------------------------------------------
+
+light:
+  - platform: binary
+    name: "Blue Status Light"
+    output: light_output
+    id: led_light
+    restore_mode: ALWAYS_OFF
+ 
+output:
+  - platform: gpio
+    pin: GPIO8
+    id: light_output
+    inverted: true
+ 
+uart:
+  id: ld2410_uart
+  tx_pin: GPIO21 # TX
+  rx_pin: GPIO20 # RX
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+ 
+ld2410:
+  uart_id: ld2410_uart
+  id: ld2410_comp
+
+select:
+  - platform: ld2410
+    distance_resolution:
+      name: distance resolution
+    baud_rate:
+      name: baud rate
+    light_function:
+      name: light function
+    out_pin_level:
+      name: out pin level
+ 
+button:
+  - platform: ld2410
+    factory_reset:
+      name: "factory reset"
+    restart:
+      name: "restart"
+    query_params:
+      name: query params
+ 
+number:
+  - platform: ld2410
+    timeout:
+      name: timeout
+    max_move_distance_gate:
+      name: max move distance gate
+    max_still_distance_gate:
+      name: max still distance gate
+    
+ 
+text_sensor:
+  - platform: ld2410
+    version:
+      name: "presenece sensor version"
+    mac_address:
+      name: "presenece sensor mac address"
+ 
+switch:
+  - platform: ld2410
+    engineering_mode:
+      name: "engineering mode"
+    bluetooth:
+      name: control Bluetooth
+ 
+sensor:
+  - platform: internal_temperature
+    name: "Internal Temperature"
+
+  - platform: ld2410
+    moving_distance:
+      name: "Moving distance (cm)"
+      filters:
+        - throttle: 1500ms
+    still_distance:
+      name: "Still Distance (cm)"
+      filters:
+        - throttle: 1500ms
+    moving_energy:
+      name: "Move Energy (%)"
+      filters:
+        - throttle: 1500ms
+    still_energy:
+      name: "Still Energy (%)"
+      filters:
+        - throttle: 1500ms
+    detection_distance:
+      name: "Distance Detection (cm)"
+      filters:
+        - throttle: 1500ms
+    
+    light:
+      name: light
+ 
+binary_sensor:
+ 
+  - platform: ld2410
+    has_target:
+      name: Presence
+    has_moving_target:
+      name: Moving Target
+    has_still_target:
+      name: Still Target
