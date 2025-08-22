@@ -2,7 +2,7 @@ substitutions:
    # Default name 
   name: "room_presence"
   # Default friendly name 
-  friendly_name: "Athom Garage Door"
+  friendly_name: "MMWave Presence"
   # Allows ESP device to be automatically linked to an 'Area' in Home Assistant. Typically used for areas such as 'Lounge Room', 'Kitchen' etc
   room: ""
   # Define a domain for this device to use. i.e. iot.home.lan (so device will appear as athom-smart-plug-v2.iot.home.lan in DNS/DHCP logs)
