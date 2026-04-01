@@ -73,8 +73,8 @@ output:
  
 uart:
   id: ld2410_uart
-  tx_pin: GPIO21 # TX
-  rx_pin: GPIO20 # RX
+  tx_pin: "${tx_pin}"
+  rx_pin: "${rx_pin}"
   baud_rate: 256000
   parity: NONE
   stop_bits: 1
