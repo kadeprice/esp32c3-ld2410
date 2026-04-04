@@ -157,11 +157,13 @@ sensor:
       name: light
  
 binary_sensor:
- 
   - platform: ld2410
     has_target:
-      name: Presence
+      name: "Presence"
+      device_class: occupancy
     has_moving_target:
-      name: Moving Target
+      name: "Moving Target"
+      device_class: motion
     has_still_target:
-      name: Still Target
+      name: "Still Target"
+      device_class: occupancy
